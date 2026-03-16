@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { siteConfig } from "@/lib/data";
 
 export const metadata: Metadata = { title: "About" };
@@ -22,7 +23,7 @@ export default function AboutPage() {
           <>I interned at NatWest Group building a security application, and at Rivos, a RISC-V chip startup in Santa Clara, as a DevOps and infrastructure intern. Rivos was acquired by Meta while I was there. I will be joining Cisco as a full-time engineer in networks and security.</>,
           <>Outside the technical work, I think seriously about how technology interacts with the world at large scales - AI safety, biosecurity, nuclear risk, energy grid resilience, and the governance of systems that could go catastrophically wrong. I follow the research and policy work in this space and think about it a lot.</>,
           <>Outside work, I enjoy outdoor activities. I read widely too - books, articles, and papers across whatever I find interesting at the time.</>,
-          <>The <a href="/blog" style={{ color: "var(--text-1)", textDecoration: "underline", textUnderlineOffset: "3px", textDecorationThickness: "1px", textDecorationColor: "var(--border)" }}>blog</a> is where I think out loud. The <a href="/reading" style={{ color: "var(--text-1)", textDecoration: "underline", textUnderlineOffset: "3px", textDecorationThickness: "1px", textDecorationColor: "var(--border)" }}>reading list</a> is a window into what I find worth paying attention to.</>,
+          <>The <Link href="/blog" style={{ color: "var(--text-1)", textDecoration: "underline", textUnderlineOffset: "3px", textDecorationThickness: "1px", textDecorationColor: "var(--border)" }}>blog</Link> is where I think out loud. The <Link href="/reading" style={{ color: "var(--text-1)", textDecoration: "underline", textUnderlineOffset: "3px", textDecorationThickness: "1px", textDecorationColor: "var(--border)" }}>reading list</Link> is a window into what I find worth paying attention to.</>,
         ].map((content, i) => (
           <p key={i} style={{ fontSize: "0.9375rem", color: "var(--text-2)", lineHeight: 1.85 }}>
             {content}
