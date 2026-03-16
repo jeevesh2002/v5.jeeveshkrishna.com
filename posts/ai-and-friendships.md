@@ -1,6 +1,6 @@
 ---
 title: "What we lose when AI manages our friendships"
-date: "2026-03-15"
+date: "2026-03-04"
 tags: ["AI", "Society", "Friendships", "Technology"]
 excerpt: "I was thinking about delegating friendship maintenance to AI. The more I followed that thought the less I liked where it went."
 published: true

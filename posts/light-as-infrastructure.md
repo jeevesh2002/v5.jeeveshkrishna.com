@@ -1,6 +1,6 @@
 ---
 title: "What if we just used light instead"
-date: "2026-03-15"
+date: "2026-01-23"
 tags: ["Networking", "Optics", "Infrastructure", "Li-Fi"]
 excerpt: "I started wondering whether you could skip radio entirely and just transmit data through light. Turns out you can. The reason it has not replaced Wi-Fi is more interesting than I expected."
 published: false

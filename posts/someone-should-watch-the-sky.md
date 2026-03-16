@@ -1,6 +1,6 @@
 ---
 title: "Someone should be watching the sky"
-date: "2026-03-15"
+date: "2026-02-13"
 tags: ["Planetary Defense", "Space", "Policy", "Existential Risk"]
 excerpt: "We have a Space Force. But Space Force is about military positioning in orbit. Who is actually responsible for protecting Earth from what comes from outside?"
 published: true

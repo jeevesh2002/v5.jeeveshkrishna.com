@@ -1,6 +1,6 @@
 ---
 title: "Your Wi-Fi did not forget your password"
-date: "2026-03-15"
+date: "2026-01-14"
 tags: ["Networking", "Security", "Wi-Fi"]
 excerpt: "I typed the same password twice. Second time it worked. That made no sense, so I kept asking why."
 published: false

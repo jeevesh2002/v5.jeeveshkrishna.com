@@ -1,6 +1,6 @@
 ---
 title: "What happens to the life we seed"
-date: "2026-03-15"
+date: "2026-02-22"
 tags: ["Astrobiology", "Panspermia", "Evolution", "Space"]
 excerpt: "I was thinking about Mars colonization and wondered why we need humans there at all. What if we just sent bacteria and waited a billion years?"
 published: true
