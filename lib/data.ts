@@ -147,6 +147,17 @@ export const certifications = [
   "CS50's Introduction to Computer Science - HarvardX",
 ];
 
+export interface DiscontinuedSite {
+  name: string;
+  period: string;
+  description: string;
+  tech: string[];
+  archiveUrl?: string;
+  reason?: string;
+}
+
+export const discontinuedSites: DiscontinuedSite[] = [];
+
 export interface InterestLink {
   title: string;
   source: string;
