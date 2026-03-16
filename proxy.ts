@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
-export function middleware(request: NextRequest) {
+export function proxy(request: NextRequest) {
   // Vercel injects the visitor's country into this header automatically
   const country = request.headers.get("x-vercel-ip-country");
 
