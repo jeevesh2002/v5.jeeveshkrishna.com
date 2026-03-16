@@ -1,6 +1,6 @@
 ---
 title: "The speed of light is a governance problem"
-date: "2026-02-03"
+date: "2026-03-15"
 tags: ["Space", "Civilization", "Fermi Paradox", "Communication"]
 excerpt: "I was thinking about Mars colonies and realized the communication delay does not just slow things down. It changes how civilization is structured at a fundamental level."
 published: true
