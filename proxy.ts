@@ -2,9 +2,10 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
 export function middleware(request: NextRequest) {
-  const country = request.geo?.country;
+  // Vercel injects the visitor's country into this header automatically
+  const country = request.headers.get("x-vercel-ip-country");
 
-  // Allow if country is unknown (local dev) or US
+  // Allow if header is absent (local dev) or country is US
   if (!country || country === "US") {
     return NextResponse.next();
   }
