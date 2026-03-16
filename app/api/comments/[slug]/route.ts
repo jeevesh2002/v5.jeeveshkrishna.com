@@ -1,6 +1,12 @@
-import { sql } from "@vercel/postgres";
+import { neon } from "@neondatabase/serverless";
 import { NextRequest, NextResponse } from "next/server";
 import { createHash } from "crypto";
+
+function getDb() {
+  const url = process.env.v5sitedb_DATABASE_URL;
+  if (!url) throw new Error("Database not configured.");
+  return neon(url);
+}
 
 // ── Rate limiting ─────────────────────────────────────────────────────────────
 // In-memory per serverless instance. Good enough for a personal blog;
@@ -45,6 +51,7 @@ function sanitize(str: string): string {
 
 // ── Table bootstrap ───────────────────────────────────────────────────────────
 async function ensureTable() {
+  const sql = getDb();
   await sql`
     CREATE TABLE IF NOT EXISTS comments (
       id SERIAL PRIMARY KEY,
@@ -67,13 +74,14 @@ export async function GET(
     return NextResponse.json({ error: "Invalid post." }, { status: 400 });
   }
 
-  if (!process.env.POSTGRES_URL) {
+  if (!process.env.v5sitedb_DATABASE_URL) {
     return NextResponse.json([], { status: 200 });
   }
 
   try {
     await ensureTable();
-    const { rows } = await sql`
+    const sql = getDb();
+    const rows = await sql`
       SELECT id, name, content, is_owner, created_at
       FROM comments
       WHERE post_slug = ${slug}
@@ -114,6 +122,7 @@ export async function DELETE(
 
   try {
     await ensureTable();
+    const sql = getDb();
     await sql`DELETE FROM comments WHERE id = ${id}`;
     return NextResponse.json({ ok: true });
   } catch (err) {
@@ -171,7 +180,7 @@ export async function POST(
     return NextResponse.json({ error: "Message too long (max 2000 characters)." }, { status: 400 });
   }
 
-  if (!process.env.POSTGRES_URL) {
+  if (!process.env.v5sitedb_DATABASE_URL) {
     return NextResponse.json({ error: "Database not configured." }, { status: 503 });
   }
 
@@ -179,7 +188,8 @@ export async function POST(
 
   try {
     await ensureTable();
-    const { rows } = await sql`
+    const sql = getDb();
+    const rows = await sql`
       INSERT INTO comments (post_slug, name, content, is_owner)
       VALUES (${slug}, ${cleanName}, ${cleanContent}, ${isOwner})
       RETURNING id, name, content, is_owner, created_at
