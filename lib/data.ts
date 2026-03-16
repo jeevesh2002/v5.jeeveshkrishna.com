@@ -147,6 +147,24 @@ export const certifications = [
   "CS50's Introduction to Computer Science - HarvardX",
 ];
 
+export interface DiscontinuedSite {
+  name: string;
+  archiveUrl?: string;
+}
+
+export const discontinuedSites: DiscontinuedSite[] = [
+  { name: "Portfolio v1", archiveUrl: "https://portfoliov1.jeeveshkrishna.com" },
+  { name: "Portfolio v2", archiveUrl: "https://portfoliov2.jeeveshkrishna.com" },
+  { name: "Portfolio v3", archiveUrl: "https://portfoliov3.jeeveshkrishna.com" },
+  { name: "Retro", archiveUrl: "https://retro.jeeveshkrishna.com" },
+  { name: "Car Game", archiveUrl: "https://car-game.jeeveshkrishna.com" },
+  { name: "Kodex Draw", archiveUrl: "https://kodex-draw.jeeveshkrishna.com" },
+  { name: "Cynaptic", archiveUrl: "https://cynaptic.jeeveshkrishna.com" },
+  { name: "Books", archiveUrl: "https://books.jeeveshkrishna.com" },
+  { name: "Blog", archiveUrl: "https://blog.jeeveshkrishna.com" },
+  { name: "Kodex API", archiveUrl: "https://api.jeeveshkrishna.com" },
+];
+
 export interface InterestLink {
   title: string;
   source: string;
