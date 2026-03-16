@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 const links = [
   { href: "/blog", label: "Blog" },
@@ -12,10 +12,11 @@ const links = [
 
 export default function Nav() {
   const pathname = usePathname();
-  const [isDark, setIsDark] = useState<boolean | null>(() => {
-    if (typeof window === "undefined") return null;
-    return document.documentElement.getAttribute("data-theme") === "dark";
-  });
+  const [isDark, setIsDark] = useState<boolean | null>(null);
+
+  useEffect(() => {
+    setIsDark(document.documentElement.getAttribute("data-theme") === "dark");
+  }, []);
 
   const toggle = () => {
     const next = !isDark;
