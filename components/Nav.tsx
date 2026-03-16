@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useState, useEffect } from "react";
+import { useState, useLayoutEffect } from "react";
 
 const links = [
   { href: "/blog", label: "Blog" },
@@ -15,7 +15,7 @@ export default function Nav() {
   const pathname = usePathname();
   const [isDark, setIsDark] = useState<boolean | null>(null);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     setIsDark(document.documentElement.getAttribute("data-theme") === "dark");
   }, []);
 
