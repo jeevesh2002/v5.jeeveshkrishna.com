@@ -3,6 +3,12 @@
 /* ─────────────────────────────────────────
    Design tokens - warm paper, soft on eyes
    ───────────────────────────────────────── */
+/* Prevent transition flash on initial page load / reload */
+.no-transition,
+.no-transition * {
+  transition: none !important;
+}
+
 :root {
   /* Warm paper - aged cream, not a glowing screen */
   --bg:      #f3ede3;
@@ -16,6 +22,8 @@
 
   --font-sans:  var(--font-inter);
   --font-serif: var(--font-lora);
+
+  color-scheme: light;
 }
 
 /* Warm charcoal dark - not cold, not harsh */
@@ -28,6 +36,8 @@
   --text-3:  #837a70;   /* warm muted */
   --text-4:  #504b45;   /* very faint */
   --nav-bg:  rgba(26, 25, 23, 0.93);
+
+  color-scheme: dark;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -40,6 +50,8 @@
     --text-3:  #837a70;
     --text-4:  #504b45;
     --nav-bg:  rgba(26, 25, 23, 0.93);
+
+    color-scheme: dark;
   }
 }
 

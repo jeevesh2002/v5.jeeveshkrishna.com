@@ -20,11 +20,15 @@ const themeScript = `(function(){
   try {
     var s = localStorage.getItem('theme');
     var d = document.documentElement;
+    d.classList.add('no-transition');
     if (s === 'dark' || (!s && window.matchMedia('(prefers-color-scheme:dark)').matches)) {
       d.setAttribute('data-theme','dark');
+      d.style.colorScheme = 'dark';
     } else {
       d.setAttribute('data-theme','light');
+      d.style.colorScheme = 'light';
     }
+    requestAnimationFrame(function(){requestAnimationFrame(function(){d.classList.remove('no-transition');});});
   } catch(e) {}
 })();`;
 

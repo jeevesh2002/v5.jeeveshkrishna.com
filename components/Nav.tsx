@@ -22,6 +22,7 @@ export default function Nav() {
     const next = !isDark;
     setIsDark(next);
     document.documentElement.setAttribute("data-theme", next ? "dark" : "light");
+    document.documentElement.style.colorScheme = next ? "dark" : "light";
     try { localStorage.setItem("theme", next ? "dark" : "light"); } catch {}
   };
 
