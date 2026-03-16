@@ -149,14 +149,21 @@ export const certifications = [
 
 export interface DiscontinuedSite {
   name: string;
-  period: string;
-  description: string;
-  tech: string[];
   archiveUrl?: string;
-  reason?: string;
 }
 
-export const discontinuedSites: DiscontinuedSite[] = [];
+export const discontinuedSites: DiscontinuedSite[] = [
+  { name: "Portfolio v1", archiveUrl: "https://portfoliov1.jeeveshkrishna.com" },
+  { name: "Portfolio v2", archiveUrl: "https://portfoliov2.jeeveshkrishna.com" },
+  { name: "Portfolio v3", archiveUrl: "https://portfoliov3.jeeveshkrishna.com" },
+  { name: "Retro", archiveUrl: "https://retro.jeeveshkrishna.com" },
+  { name: "Car Game", archiveUrl: "https://car-game.jeeveshkrishna.com" },
+  { name: "Kodex Draw", archiveUrl: "https://kodex-draw.jeeveshkrishna.com" },
+  { name: "Cynaptic", archiveUrl: "https://cynaptic.jeeveshkrishna.com" },
+  { name: "Books", archiveUrl: "https://books.jeeveshkrishna.com" },
+  { name: "Blog", archiveUrl: "https://blog.jeeveshkrishna.com" },
+  { name: "Kodex API", archiveUrl: "https://api.jeeveshkrishna.com" },
+];
 
 export interface InterestLink {
   title: string;
