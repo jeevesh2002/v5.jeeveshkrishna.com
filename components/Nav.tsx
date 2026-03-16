@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useState, useLayoutEffect } from "react";
+import { useSyncExternalStore } from "react";
 
 const links = [
   { href: "/blog", label: "Blog" },
@@ -11,17 +11,22 @@ const links = [
   { href: "/about", label: "About" },
 ];
 
+function subscribeTheme(cb: () => void) {
+  const mo = new MutationObserver(cb);
+  mo.observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
+  return () => mo.disconnect();
+}
+
 export default function Nav() {
   const pathname = usePathname();
-  const [isDark, setIsDark] = useState<boolean | null>(null);
-
-  useLayoutEffect(() => {
-    setIsDark(document.documentElement.getAttribute("data-theme") === "dark");
-  }, []);
+  const isDark = useSyncExternalStore<boolean | null>(
+    subscribeTheme,
+    () => document.documentElement.getAttribute("data-theme") === "dark",
+    () => null,
+  );
 
   const toggle = () => {
     const next = !isDark;
-    setIsDark(next);
     document.documentElement.setAttribute("data-theme", next ? "dark" : "light");
     try { localStorage.setItem("theme", next ? "dark" : "light"); } catch {}
   };
