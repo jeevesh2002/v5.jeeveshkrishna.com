@@ -79,10 +79,10 @@ When posting a comment with a valid `ADMIN_KEY` in the request body, the comment
 
 ## Environment Variables
 
-| Variable | Required | Purpose |
-| --- | --- | --- |
+| Variable       | Required | Purpose                                                                      |
+| -------------- | -------- | ---------------------------------------------------------------------------- |
 | `POSTGRES_URL` | Optional | Vercel Postgres connection string. Comments are silently disabled if absent. |
-| `ADMIN_KEY` | Optional | Secret key for posting owner-flagged comments and deleting any comment. |
+| `ADMIN_KEY`    | Optional | Secret key for posting owner-flagged comments and deleting any comment.      |
 
 ## Development
 

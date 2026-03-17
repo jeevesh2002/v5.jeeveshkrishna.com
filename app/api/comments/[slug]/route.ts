@@ -46,7 +46,10 @@ const VALID_SLUG = /^[a-z0-9][a-z0-9-]*$/;
 
 // Strip any HTML/script tags from user input before storing
 function sanitize(str: string): string {
-  return str.replace(/<[^>]*>/g, "").replace(/[<>]/g, "").trim();
+  return str
+    .replace(/<[^>]*>/g, "")
+    .replace(/[<>]/g, "")
+    .trim();
 }
 
 // ── Table bootstrap ───────────────────────────────────────────────────────────
@@ -65,10 +68,7 @@ async function ensureTable() {
 }
 
 // ── GET /api/comments/[slug] ──────────────────────────────────────────────────
-export async function GET(
-  req: NextRequest,
-  { params }: { params: Promise<{ slug: string }> }
-) {
+export async function GET(req: NextRequest, { params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   if (!VALID_SLUG.test(slug)) {
     return NextResponse.json({ error: "Invalid post." }, { status: 400 });
@@ -95,10 +95,7 @@ export async function GET(
 }
 
 // ── DELETE /api/comments/[slug] ───────────────────────────────────────────────
-export async function DELETE(
-  req: NextRequest,
-  { params }: { params: Promise<{ slug: string }> }
-) {
+export async function DELETE(req: NextRequest, { params }: { params: Promise<{ slug: string }> }) {
   await params;
   const ip = clientIp(req);
 
@@ -132,10 +129,7 @@ export async function DELETE(
 }
 
 // ── POST /api/comments/[slug] ─────────────────────────────────────────────────
-export async function POST(
-  req: NextRequest,
-  { params }: { params: Promise<{ slug: string }> }
-) {
+export async function POST(req: NextRequest, { params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
 
   // Reject requests that don't look like they came from this site

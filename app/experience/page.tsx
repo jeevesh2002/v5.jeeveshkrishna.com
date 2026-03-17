@@ -22,7 +22,6 @@ const periodStyle = {
 export default function ExperiencePage() {
   return (
     <div style={{ maxWidth: "672px", margin: "0 auto", padding: "4rem 20px" }}>
-
       <h1
         style={{
           fontSize: "1.5rem",
@@ -153,7 +152,9 @@ export default function ExperiencePage() {
                 {edu.location} · GPA {edu.gpa}
               </p>
               {edu.courses.length > 0 && (
-                <div style={{ display: "flex", flexWrap: "wrap", gap: "0.4rem", marginTop: "0.75rem" }}>
+                <div
+                  style={{ display: "flex", flexWrap: "wrap", gap: "0.4rem", marginTop: "0.75rem" }}
+                >
                   {edu.courses.map((c) => (
                     <span
                       key={c}
@@ -175,7 +176,6 @@ export default function ExperiencePage() {
           ))}
         </div>
       </section>
-
     </div>
   );
 }

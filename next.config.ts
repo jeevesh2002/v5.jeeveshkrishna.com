@@ -12,7 +12,10 @@ const securityHeaders = [
   // Only send the origin (no path) in the Referer header to external sites
   { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
   // Disable browser features this site doesn't use
-  { key: "Permissions-Policy", value: "camera=(), microphone=(), geolocation=(), browsing-topics=()" },
+  {
+    key: "Permissions-Policy",
+    value: "camera=(), microphone=(), geolocation=(), browsing-topics=()",
+  },
   {
     key: "Content-Security-Policy",
     value: [

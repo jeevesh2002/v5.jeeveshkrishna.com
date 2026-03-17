@@ -2,7 +2,7 @@ name: CI
 
 on:
   push:
-    branches: ['**']
+    branches: ["**"]
   pull_request:
     branches: [master]
 
@@ -17,7 +17,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: 'npm'
+          cache: "npm"
 
       - name: Install dependencies
         run: npm ci
@@ -30,4 +30,4 @@ jobs:
         env:
           # Keeps the build from failing when POSTGRES_URL is absent in CI.
           # Comments are simply disabled when this is unset (see README).
-          POSTGRES_URL: ''
+          POSTGRES_URL: ""

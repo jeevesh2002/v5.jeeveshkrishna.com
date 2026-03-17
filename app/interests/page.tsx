@@ -6,7 +6,6 @@ export const metadata: Metadata = { title: "Interests" };
 export default function InterestsPage() {
   return (
     <div style={{ maxWidth: "672px", margin: "0 auto", padding: "4rem 20px" }}>
-
       <h1
         style={{
           fontSize: "1.5rem",
@@ -152,7 +151,6 @@ export default function InterestsPage() {
           .
         </p>
       </div>
-
     </div>
   );
 }

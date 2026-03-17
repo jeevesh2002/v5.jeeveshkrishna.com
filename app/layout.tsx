@@ -3,16 +3,34 @@ import { Inter, Lora } from "next/font/google";
 import "./globals.css";
 import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
+import ScrollToTop from "@/components/ScrollToTop";
 import { Analytics } from "@vercel/analytics/next";
+import { siteConfig } from "@/lib/data";
 
-const inter = Inter({ subsets: ["latin"], variable: "--font-inter", weight: ["400", "500", "600", "700"], display: "swap" });
-const lora = Lora({ subsets: ["latin"], variable: "--font-lora", weight: ["400", "500", "600", "700"], display: "swap" });
+const inter = Inter({
+  subsets: ["latin"],
+  variable: "--font-inter",
+  weight: ["400", "500", "600", "700"],
+  display: "swap",
+});
+const lora = Lora({
+  subsets: ["latin"],
+  variable: "--font-lora",
+  weight: ["400", "500", "600", "700"],
+  display: "swap",
+});
 
 export const metadata: Metadata = {
-  title: { default: "Jeevesh Krishna Arigala", template: "%s · Jeevesh Krishna Arigala" },
-  description: "Computer scientist. I build infrastructure and security systems, and think seriously about how technology shapes civilizational outcomes.",
-  authors: [{ name: "Jeevesh Krishna Arigala" }],
-  openGraph: { siteName: "Jeevesh Krishna Arigala", type: "website" },
+  title: { default: siteConfig.name, template: `%s · ${siteConfig.name}` },
+  description:
+    "Computer scientist. I build infrastructure and security systems, and think seriously about how technology shapes civilizational outcomes.",
+  authors: [{ name: siteConfig.name }],
+  openGraph: { siteName: siteConfig.name, type: "website" },
+  alternates: {
+    types: {
+      "application/rss+xml": `${siteConfig.siteUrl}/feed.xml`,
+    },
+  },
 };
 
 // Runs synchronously before paint - prevents flash of wrong theme
@@ -35,10 +53,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         {/* Must be first child - prevents flash of wrong theme */}
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
         <Nav />
-        <main style={{ paddingTop: "56px", minHeight: "100vh" }}>
-          {children}
-        </main>
+        <main style={{ paddingTop: "56px", minHeight: "100vh" }}>{children}</main>
         <Footer />
+        <ScrollToTop />
         <Analytics />
       </body>
     </html>
