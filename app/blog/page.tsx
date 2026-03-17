@@ -73,7 +73,7 @@ export default function BlogPage() {
           lineHeight: 1.7,
         }}
       >
-        Have a topic you want me to dig into, or want to collaborate on a post?{" "}
+        Have a topic you want me to write about, or want to collaborate on a post?{" "}
         <Link
           href="/bugs"
           style={{

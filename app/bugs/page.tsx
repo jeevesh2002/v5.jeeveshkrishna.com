@@ -183,7 +183,7 @@ export default function BugsPage() {
             marginBottom: "1rem",
           }}
         >
-          If there is something you have been thinking about and would like me to dig into, I am
+          If there is something you have been thinking about and would like me to write about, I am
           always interested. Some of the best writing starts with a question someone else is sitting
           with.
         </p>
@@ -194,7 +194,7 @@ export default function BugsPage() {
             lineHeight: 1.85,
           }}
         >
-          If you want to work through an idea together and build something worth publishing, that is
+          If you want to work through an idea together and build something worth posting, that is
           also on the table. Just email me with a rough sense of what you have in mind.
         </p>
         <a
