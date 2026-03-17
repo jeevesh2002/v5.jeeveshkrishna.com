@@ -3,7 +3,7 @@ title: "Hello, World - Why I Started This Blog"
 date: "2026-01-05"
 tags: ["Meta", "Writing"]
 excerpt: "A short note on why I decided to start writing publicly - and what I hope to explore here."
-published: false
+published: true
 ---
 
 ## Why Write?
