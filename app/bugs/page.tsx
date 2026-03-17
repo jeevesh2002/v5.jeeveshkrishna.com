@@ -6,8 +6,7 @@ export const metadata: Metadata = { title: "Bugs & Feedback" };
 const knownBugs: { id: string; description: string; severity: "minor" | "cosmetic" }[] = [
   {
     id: "BUG-001",
-    description:
-      "Dark and light mode can behave oddly on page reload. The theme may briefly flash or show the wrong preference before settling.",
+    description: "Dark and light mode can behave oddly on page reload.",
     severity: "cosmetic",
   },
 ];
