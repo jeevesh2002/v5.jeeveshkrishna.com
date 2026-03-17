@@ -3,7 +3,7 @@ title: "Your Wi-Fi did not forget your password"
 date: "2026-01-14"
 tags: ["Networking", "Security", "Wi-Fi"]
 excerpt: "I typed the same password twice. Second time it worked. That made no sense, so I kept asking why."
-published: true
+published: false
 ---
 
 There is a specific moment where this happens. Your Wi-Fi goes out - router hiccup, whatever - and comes back up a few seconds later. You see the network appear on your phone and you tap connect immediately. It says incorrect password. Same network you have been on for years. You type the same password again, or just tap connect again, and it works.
