@@ -97,17 +97,30 @@ export default function Footer() {
               RSS
             </a>
           </div>
-          <Link
-            href="/colophon"
-            style={{
-              fontSize: "0.75rem",
-              color: "var(--text-4)",
-              textDecoration: "none",
-              opacity: 0.7,
-            }}
-          >
-            Colophon
-          </Link>
+          <div style={{ display: "flex", gap: "1rem" }}>
+            <Link
+              href="/bugs"
+              style={{
+                fontSize: "0.75rem",
+                color: "var(--text-4)",
+                textDecoration: "none",
+                opacity: 0.7,
+              }}
+            >
+              Bugs &amp; Feedback
+            </Link>
+            <Link
+              href="/colophon"
+              style={{
+                fontSize: "0.75rem",
+                color: "var(--text-4)",
+                textDecoration: "none",
+                opacity: 0.7,
+              }}
+            >
+              Colophon
+            </Link>
+          </div>
         </div>
       </div>
     </footer>

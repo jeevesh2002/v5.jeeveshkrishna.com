@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { Rss } from "lucide-react";
 import { getAllPosts } from "@/lib/posts";
 import BlogContent from "./BlogContent";
+import NewsletterSignup from "@/components/NewsletterSignup";
 
 export const metadata: Metadata = { title: "Blog" };
 
@@ -62,6 +64,30 @@ export default function BlogPage() {
         and whatever I could not stop thinking about long enough to write down.
       </p>
       <BlogContent posts={posts} />
+      <NewsletterSignup />
+      <p
+        style={{
+          marginTop: "2rem",
+          fontSize: "0.875rem",
+          color: "var(--text-4)",
+          lineHeight: 1.7,
+        }}
+      >
+        Have a topic you want me to write about, or want to collaborate on a post?{" "}
+        <Link
+          href="/bugs"
+          style={{
+            color: "var(--text-3)",
+            textDecoration: "underline",
+            textUnderlineOffset: "3px",
+            textDecorationThickness: "1px",
+            textDecorationColor: "var(--border)",
+          }}
+        >
+          Reach out
+        </Link>
+        .
+      </p>
     </div>
   );
 }
