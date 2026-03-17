@@ -4,8 +4,12 @@ import { siteConfig } from "@/lib/data";
 export const metadata: Metadata = { title: "Bugs & Feedback" };
 
 const knownBugs: { id: string; description: string; severity: "minor" | "cosmetic" }[] = [
-  // Add known bugs here as they are discovered. Example:
-  // { id: "BUG-001", description: "...", severity: "minor" },
+  {
+    id: "BUG-001",
+    description:
+      "Dark and light mode can behave oddly on page reload. The theme may briefly flash or show the wrong preference before settling.",
+    severity: "cosmetic",
+  },
 ];
 
 export default function BugsPage() {

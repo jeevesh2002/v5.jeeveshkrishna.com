@@ -5,6 +5,8 @@ import { Mail } from "lucide-react";
 
 type Status = "idle" | "loading" | "success" | "error";
 
+const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
 export default function NewsletterSignup() {
   const [email, setEmail] = useState("");
   const [hp, setHp] = useState(""); // honeypot
@@ -13,8 +15,16 @@ export default function NewsletterSignup() {
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    setStatus("loading");
     setErrorMsg("");
+
+    const trimmed = email.trim();
+    if (!trimmed || !EMAIL_REGEX.test(trimmed)) {
+      setErrorMsg("Please enter a valid email address.");
+      setStatus("error");
+      return;
+    }
+
+    setStatus("loading");
 
     try {
       const res = await fetch("/api/subscribe", {
@@ -107,6 +117,7 @@ export default function NewsletterSignup() {
               onChange={(e) => setEmail(e.target.value)}
               placeholder="your@email.com"
               required
+              maxLength={254}
               disabled={status === "loading"}
               style={{
                 background: "none",

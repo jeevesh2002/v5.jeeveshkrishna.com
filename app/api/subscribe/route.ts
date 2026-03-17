@@ -1,6 +1,7 @@
 import { neon } from "@neondatabase/serverless";
 import { NextRequest, NextResponse } from "next/server";
 import { randomUUID } from "crypto";
+import { promises as dns } from "dns";
 import { Resend } from "resend";
 import { siteConfig } from "@/lib/data";
 import { buildWelcomeHtml, buildWelcomeText } from "@/lib/email";
@@ -31,6 +32,17 @@ function clientIp(req: NextRequest): string {
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
+async function hasMxRecords(email: string): Promise<boolean> {
+  try {
+    const domain = email.split("@")[1];
+    if (!domain) return false;
+    const records = await dns.resolveMx(domain);
+    return records.length > 0;
+  } catch {
+    return false;
+  }
+}
+
 async function ensureTable() {
   const sql = getDb();
   await sql`
@@ -59,7 +71,7 @@ export async function POST(req: NextRequest) {
   if (hp) return NextResponse.json({ ok: true }, { status: 201 });
 
   if (!email || typeof email !== "string" || !EMAIL_REGEX.test(email) || email.length > 254) {
-    return NextResponse.json({ error: "Please enter a valid email address." }, { status: 400 });
+    return NextResponse.json({ ok: true }, { status: 201 });
   }
 
   if (!process.env.v5sitedb_DATABASE_URL) {
@@ -67,6 +79,11 @@ export async function POST(req: NextRequest) {
   }
 
   try {
+    const mxValid = await hasMxRecords(email.toLowerCase().trim());
+    if (!mxValid) {
+      return NextResponse.json({ ok: true }, { status: 201 });
+    }
+
     await ensureTable();
     const sql = getDb();
     const token = randomUUID();
