@@ -1,7 +1,7 @@
 {
   "crons": [
     {
-      "path": "/api/newsletter/auto-send",
+      "path": "/api/newsletter/auto-send/",
       "schedule": "0 10 * * *"
     }
   ]
