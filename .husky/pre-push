@@ -1,0 +1,6 @@
+#!/bin/sh
+echo "Running type check..."
+npm run typecheck || exit 1
+
+echo "Running build..."
+npm run build || exit 1

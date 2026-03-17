@@ -1,0 +1,23 @@
+#!/bin/sh
+commit_msg=$(cat "$1")
+
+# Allow merge commits and revert commits
+if echo "$commit_msg" | grep -qE "^(Merge|Revert|fixup!|squash!)"; then
+  exit 0
+fi
+
+pattern="^(feat|fix|chore|docs|style|refactor|test|perf|ci|build|revert)(\(.+\))?(!)?: .{1,}"
+
+if ! echo "$commit_msg" | grep -qE "$pattern"; then
+  echo ""
+  echo "  Invalid commit message format."
+  echo ""
+  echo "  Expected: <type>(<scope>): <description>"
+  echo "  Example:  feat(blog): add RSS feed"
+  echo ""
+  echo "  Types: feat, fix, chore, docs, style, refactor, test, perf, ci, build, revert"
+  echo ""
+  echo "  Your message: $commit_msg"
+  echo ""
+  exit 1
+fi

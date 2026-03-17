@@ -12,7 +12,9 @@ interface Comment {
 
 function formatDate(iso: string) {
   return new Date(iso).toLocaleDateString("en-US", {
-    month: "long", day: "numeric", year: "numeric",
+    month: "long",
+    day: "numeric",
+    year: "numeric",
   });
 }
 
@@ -31,7 +33,9 @@ export default function Comments({ slug }: { slug: string }) {
   useEffect(() => {
     fetch(`/api/comments/${slug}`)
       .then((r) => r.json())
-      .then((data) => { if (Array.isArray(data)) setComments(data); })
+      .then((data) => {
+        if (Array.isArray(data)) setComments(data);
+      })
       .catch(() => {});
   }, [slug]);
 
@@ -96,28 +100,61 @@ export default function Comments({ slug }: { slug: string }) {
 
   return (
     <div style={{ marginTop: "4rem", paddingTop: "2rem", borderTop: "1px solid var(--border)" }}>
-      <h2 style={{ fontSize: "1rem", fontWeight: 600, color: "var(--text-2)", marginBottom: "1.5rem", letterSpacing: "-0.01em" }}>
-        Comments{comments.length > 0 && (
-          <span style={{ fontWeight: 400, color: "var(--text-4)", marginLeft: "0.375rem" }}>({comments.length})</span>
+      <h2
+        style={{
+          fontSize: "1rem",
+          fontWeight: 600,
+          color: "var(--text-2)",
+          marginBottom: "1.5rem",
+          letterSpacing: "-0.01em",
+        }}
+      >
+        Comments
+        {comments.length > 0 && (
+          <span style={{ fontWeight: 400, color: "var(--text-4)", marginLeft: "0.375rem" }}>
+            ({comments.length})
+          </span>
         )}
       </h2>
 
       {comments.length > 0 && (
-        <div style={{ display: "flex", flexDirection: "column", gap: "0.75rem", marginBottom: "2rem" }}>
+        <div
+          style={{ display: "flex", flexDirection: "column", gap: "0.75rem", marginBottom: "2rem" }}
+        >
           {comments.map((c) => (
-            <div key={c.id} style={{
-              padding: "0.875rem 1rem",
-              border: "1px solid var(--border)",
-              borderRadius: "5px",
-            }}>
-              <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", marginBottom: "0.5rem", flexWrap: "wrap" }}>
-                <span style={{ fontSize: "0.875rem", fontWeight: 500, color: "var(--text-2)" }}>{c.name}</span>
+            <div
+              key={c.id}
+              style={{
+                padding: "0.875rem 1rem",
+                border: "1px solid var(--border)",
+                borderRadius: "5px",
+              }}
+            >
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "0.5rem",
+                  marginBottom: "0.5rem",
+                  flexWrap: "wrap",
+                }}
+              >
+                <span style={{ fontSize: "0.875rem", fontWeight: 500, color: "var(--text-2)" }}>
+                  {c.name}
+                </span>
                 {c.is_owner && (
-                  <span style={{
-                    fontSize: "0.625rem", fontWeight: 500, letterSpacing: "0.06em",
-                    textTransform: "uppercase", color: "var(--text-4)",
-                    border: "1px solid var(--border)", borderRadius: "3px", padding: "0.1rem 0.35rem",
-                  }}>
+                  <span
+                    style={{
+                      fontSize: "0.625rem",
+                      fontWeight: 500,
+                      letterSpacing: "0.06em",
+                      textTransform: "uppercase",
+                      color: "var(--text-4)",
+                      border: "1px solid var(--border)",
+                      borderRadius: "3px",
+                      padding: "0.1rem 0.35rem",
+                    }}
+                  >
                     author
                   </span>
                 )}
@@ -128,19 +165,39 @@ export default function Comments({ slug }: { slug: string }) {
                   <button
                     onClick={() => handleDelete(c.id)}
                     disabled={deleting === c.id}
-                    style={{ fontSize: "0.75rem", color: "var(--text-4)", background: "none", border: "none", cursor: "pointer", padding: 0, marginLeft: "0.5rem" }}
+                    style={{
+                      fontSize: "0.75rem",
+                      color: "var(--text-4)",
+                      background: "none",
+                      border: "none",
+                      cursor: "pointer",
+                      padding: 0,
+                      marginLeft: "0.5rem",
+                    }}
                   >
                     {deleting === c.id ? "..." : "Remove"}
                   </button>
                 )}
               </div>
-              <p style={{ fontSize: "0.9375rem", color: "var(--text-2)", lineHeight: 1.65, margin: 0 }}>{c.content}</p>
+              <p
+                style={{
+                  fontSize: "0.9375rem",
+                  color: "var(--text-2)",
+                  lineHeight: 1.65,
+                  margin: 0,
+                }}
+              >
+                {c.content}
+              </p>
             </div>
           ))}
         </div>
       )}
 
-      <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: "0.75rem" }}>
+      <form
+        onSubmit={handleSubmit}
+        style={{ display: "flex", flexDirection: "column", gap: "0.75rem" }}
+      >
         {/* Honeypot: invisible to humans, bots fill it in and get silently dropped server-side */}
         <input
           type="text"
@@ -183,7 +240,14 @@ export default function Comments({ slug }: { slug: string }) {
           <button
             type="button"
             onClick={() => setShowAdminField((v) => !v)}
-            style={{ fontSize: "0.75rem", color: "var(--text-4)", background: "none", border: "none", cursor: "pointer", padding: 0 }}
+            style={{
+              fontSize: "0.75rem",
+              color: "var(--text-4)",
+              background: "none",
+              border: "none",
+              cursor: "pointer",
+              padding: 0,
+            }}
           >
             {showAdminField ? "Cancel" : "Reply as author"}
           </button>
@@ -205,8 +269,12 @@ export default function Comments({ slug }: { slug: string }) {
             {submitting ? "Posting..." : "Post"}
           </button>
         </div>
-        {error && <p style={{ fontSize: "0.875rem", color: "var(--text-3)", margin: 0 }}>{error}</p>}
-        {success && <p style={{ fontSize: "0.875rem", color: "var(--text-3)", margin: 0 }}>Comment posted.</p>}
+        {error && (
+          <p style={{ fontSize: "0.875rem", color: "var(--text-3)", margin: 0 }}>{error}</p>
+        )}
+        {success && (
+          <p style={{ fontSize: "0.875rem", color: "var(--text-3)", margin: 0 }}>Comment posted.</p>
+        )}
       </form>
     </div>
   );
