@@ -241,6 +241,73 @@ body {
   padding: 0.5rem 0.75rem;
 }
 
+/* ─── Rendered comment content ─── */
+.comment-content p {
+  margin: 0 0 0.5em;
+}
+.comment-content p:last-child {
+  margin-bottom: 0;
+}
+.comment-content strong {
+  font-weight: 600;
+  color: var(--text-1);
+}
+.comment-content em {
+  font-style: italic;
+}
+.comment-content s {
+  text-decoration: line-through;
+}
+.comment-content code {
+  font-family: ui-monospace, monospace;
+  font-size: 0.85em;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  padding: 0.1em 0.3em;
+  border-radius: 3px;
+}
+.comment-content pre {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  padding: 0.75em 1em;
+  overflow-x: auto;
+  margin: 0.5em 0;
+}
+.comment-content pre code {
+  background: none;
+  border: none;
+  padding: 0;
+  font-size: 0.875em;
+}
+.comment-content blockquote {
+  border-left: 2px solid var(--border);
+  padding-left: 0.75em;
+  color: var(--text-3);
+  margin: 0.5em 0;
+}
+.comment-content ul {
+  list-style: disc;
+  padding-left: 1.25em;
+  margin: 0.25em 0;
+}
+.comment-content ol {
+  list-style: decimal;
+  padding-left: 1.25em;
+  margin: 0.25em 0;
+}
+.comment-content li {
+  margin: 0.1em 0;
+}
+.comment-content a {
+  color: var(--text-2);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.comment-content a:hover {
+  color: var(--text-1);
+}
+
 /* ─── Icon links and share buttons ─── */
 .icon-link:hover {
   color: var(--text-2);
