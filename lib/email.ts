@@ -185,3 +185,123 @@ export function buildWelcomeText(opts: { unsubscribeUrl: string }): string {
     `Unsubscribe: ${unsubscribeUrl}`,
   ].join("\n");
 }
+
+// ── Owner notification emails ─────────────────────────────────────────────────
+
+export function buildCommentNotificationHtml(opts: {
+  slug: string;
+  name: string;
+  preview: string;
+  postUrl: string;
+}): string {
+  const { slug, name, preview, postUrl } = opts;
+  return `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>New comment on /${escapeHtml(slug)}</title>
+</head>
+<body style="margin:0;padding:0;background:#f3ede3;">
+  <table width="100%" cellpadding="0" cellspacing="0" style="background:#f3ede3;padding:40px 16px;">
+    <tr>
+      <td align="center">
+        <table width="100%" cellpadding="0" cellspacing="0" style="max-width:600px;">
+
+          <tr>
+            <td style="padding-bottom:32px;border-bottom:1px solid #d5cdbf;">
+              <p style="margin:0;font-family:'Inter',Helvetica,Arial,sans-serif;font-size:13px;color:#a89e95;letter-spacing:0.08em;text-transform:uppercase;">
+                Jeevesh Krishna &middot; New Comment
+              </p>
+            </td>
+          </tr>
+
+          <tr>
+            <td style="padding-top:32px;padding-bottom:32px;">
+              <p style="margin:0 0 8px;font-family:'Inter',Helvetica,Arial,sans-serif;font-size:12px;color:#a89e95;letter-spacing:0.08em;text-transform:uppercase;">
+                /${escapeHtml(slug)}
+              </p>
+              <h1 style="margin:0 0 20px;font-family:'Georgia',serif;font-size:22px;font-weight:600;color:#302c23;line-height:1.2;letter-spacing:-0.02em;">
+                ${escapeHtml(name)} left a comment
+              </h1>
+              <p style="margin:0 0 28px;font-family:'Inter',Helvetica,Arial,sans-serif;font-size:15px;color:#48443b;line-height:1.75;border-left:3px solid #d5cdbf;padding-left:16px;">
+                ${escapeHtml(preview)}${preview.length >= 300 ? "..." : ""}
+              </p>
+              <a href="${postUrl}" style="display:inline-block;font-family:'Inter',Helvetica,Arial,sans-serif;font-size:14px;color:#302c23;text-decoration:underline;text-underline-offset:3px;">
+                View post &rarr;
+              </a>
+            </td>
+          </tr>
+
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>`;
+}
+
+export function buildCommentNotificationText(opts: {
+  slug: string;
+  name: string;
+  preview: string;
+  postUrl: string;
+}): string {
+  const { slug, name, preview, postUrl } = opts;
+  return [
+    `New comment on /${slug}`,
+    "",
+    `From: ${name}`,
+    "",
+    preview + (preview.length >= 300 ? "..." : ""),
+    "",
+    `View post: ${postUrl}`,
+  ].join("\n");
+}
+
+export function buildSubscribeNotificationHtml(opts: { email: string }): string {
+  const { email } = opts;
+  return `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>New subscriber</title>
+</head>
+<body style="margin:0;padding:0;background:#f3ede3;">
+  <table width="100%" cellpadding="0" cellspacing="0" style="background:#f3ede3;padding:40px 16px;">
+    <tr>
+      <td align="center">
+        <table width="100%" cellpadding="0" cellspacing="0" style="max-width:600px;">
+
+          <tr>
+            <td style="padding-bottom:32px;border-bottom:1px solid #d5cdbf;">
+              <p style="margin:0;font-family:'Inter',Helvetica,Arial,sans-serif;font-size:13px;color:#a89e95;letter-spacing:0.08em;text-transform:uppercase;">
+                Jeevesh Krishna &middot; New Subscriber
+              </p>
+            </td>
+          </tr>
+
+          <tr>
+            <td style="padding-top:32px;padding-bottom:32px;">
+              <h1 style="margin:0 0 20px;font-family:'Georgia',serif;font-size:22px;font-weight:600;color:#302c23;line-height:1.2;letter-spacing:-0.02em;">
+                Someone subscribed to your newsletter.
+              </h1>
+              <p style="margin:0;font-family:'Inter',Helvetica,Arial,sans-serif;font-size:15px;color:#48443b;line-height:1.75;">
+                ${escapeHtml(email)}
+              </p>
+            </td>
+          </tr>
+
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>`;
+}
+
+export function buildSubscribeNotificationText(opts: { email: string }): string {
+  const { email } = opts;
+  return ["New subscriber:", "", email].join("\n");
+}

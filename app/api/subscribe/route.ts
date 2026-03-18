@@ -4,7 +4,12 @@ import { randomUUID } from "crypto";
 import { promises as dns } from "dns";
 import { Resend } from "resend";
 import { siteConfig } from "@/lib/data";
-import { buildWelcomeHtml, buildWelcomeText } from "@/lib/email";
+import {
+  buildWelcomeHtml,
+  buildWelcomeText,
+  buildSubscribeNotificationHtml,
+  buildSubscribeNotificationText,
+} from "@/lib/email";
 
 function getDb() {
   const url = process.env.v5sitedb_DATABASE_URL;
@@ -99,12 +104,32 @@ export async function POST(req: NextRequest) {
     if (rows.length > 0) {
       const unsubscribeToken = rows[0].unsubscribe_token as string;
       await sendWelcomeEmail(email.toLowerCase().trim(), unsubscribeToken);
+      sendOwnerSubscribeNotification(email.toLowerCase().trim()).catch(() => {});
     }
 
     return NextResponse.json({ ok: true }, { status: 201 });
   } catch (err) {
     console.error("[subscribe POST]", err);
     return NextResponse.json({ error: "Something went wrong. Please try again." }, { status: 500 });
+  }
+}
+
+async function sendOwnerSubscribeNotification(email: string) {
+  const resendApiKey = process.env.RESEND_API_KEY;
+  const notifyEmail = process.env.NOTIFY_EMAIL;
+  if (!resendApiKey || !notifyEmail) return;
+
+  const resend = new Resend(resendApiKey);
+  const { error } = await resend.emails.send({
+    from: "Jeevesh Krishna <notifications@jeeveshkrishna.com>",
+    to: notifyEmail,
+    subject: `New subscriber: ${email}`,
+    html: buildSubscribeNotificationHtml({ email }),
+    text: buildSubscribeNotificationText({ email }),
+  });
+
+  if (error) {
+    console.error("[subscribe notification]", error);
   }
 }
 

@@ -4,6 +4,9 @@ import { createHash } from "crypto";
 import sanitizeHtml from "sanitize-html";
 import { remark } from "remark";
 import remarkHtml from "remark-html";
+import { Resend } from "resend";
+import { siteConfig } from "@/lib/data";
+import { buildCommentNotificationHtml, buildCommentNotificationText } from "@/lib/email";
 
 function getDb() {
   const url = process.env.v5sitedb_DATABASE_URL;
@@ -91,6 +94,35 @@ function sanitizeContent(html: string): string {
 async function processMarkdown(markdown: string): Promise<string> {
   const result = await remark().use(remarkHtml, { sanitize: false }).process(markdown);
   return sanitizeContent(result.toString());
+}
+
+// ── Owner notification ────────────────────────────────────────────────────────
+
+async function sendOwnerCommentNotification(opts: {
+  slug: string;
+  name: string;
+  rawContent: string;
+}) {
+  const resendApiKey = process.env.RESEND_API_KEY;
+  const notifyEmail = process.env.NOTIFY_EMAIL;
+  if (!resendApiKey || !notifyEmail) return;
+
+  const { slug, name, rawContent } = opts;
+  const preview = rawContent.replace(/<[^>]*>/g, "").slice(0, 300);
+  const postUrl = `${siteConfig.siteUrl}/blog/${slug}`;
+
+  const resend = new Resend(resendApiKey);
+  const { error } = await resend.emails.send({
+    from: "Jeevesh Krishna <notifications@jeeveshkrishna.com>",
+    to: notifyEmail,
+    subject: `New comment on /${slug} from ${name}`,
+    html: buildCommentNotificationHtml({ slug, name, preview, postUrl }),
+    text: buildCommentNotificationText({ slug, name, preview, postUrl }),
+  });
+
+  if (error) {
+    console.error("[comment notification]", error);
+  }
 }
 
 // ── Table bootstrap ───────────────────────────────────────────────────────────
@@ -231,6 +263,11 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ slu
       VALUES (${slug}, ${cleanName}, ${cleanContent}, ${isOwner})
       RETURNING id, name, content, is_owner, created_at
     `;
+
+    if (!isOwner) {
+      sendOwnerCommentNotification({ slug, name: cleanName, rawContent }).catch(() => {});
+    }
+
     return NextResponse.json(rows[0], { status: 201 });
   } catch (err) {
     console.error("[comments POST]", err);
