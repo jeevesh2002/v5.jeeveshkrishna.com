@@ -1,6 +1,9 @@
 import { neon } from "@neondatabase/serverless";
 import { NextRequest, NextResponse } from "next/server";
 import { createHash } from "crypto";
+import sanitizeHtml from "sanitize-html";
+import { remark } from "remark";
+import remarkHtml from "remark-html";
 
 function getDb() {
   const url = process.env.v5sitedb_DATABASE_URL;
@@ -44,12 +47,50 @@ function isValidAdminKey(provided: string): boolean {
 // ── Validation helpers ────────────────────────────────────────────────────────
 const VALID_SLUG = /^[a-z0-9][a-z0-9-]*$/;
 
-// Strip any HTML/script tags from user input before storing
-function sanitize(str: string): string {
+// Plain-text sanitization for name field - strip all markup
+function sanitizeName(str: string): string {
   return str
     .replace(/<[^>]*>/g, "")
     .replace(/[<>]/g, "")
     .trim();
+}
+
+// Rich-text sanitization for comment content - allowlist only safe tags.
+// Links get rel="nofollow noopener noreferrer" and open in a new tab.
+function sanitizeContent(html: string): string {
+  return sanitizeHtml(html, {
+    allowedTags: [
+      "p",
+      "br",
+      "strong",
+      "em",
+      "s",
+      "code",
+      "pre",
+      "blockquote",
+      "ul",
+      "ol",
+      "li",
+      "a",
+    ],
+    allowedAttributes: { a: ["href"] },
+    transformTags: {
+      a: (_tag, attribs) => ({
+        tagName: "a",
+        attribs: {
+          href: attribs.href ?? "",
+          rel: "nofollow noopener noreferrer",
+          target: "_blank",
+        },
+      }),
+    },
+  });
+}
+
+// Convert markdown to sanitized HTML for storage
+async function processMarkdown(markdown: string): Promise<string> {
+  const result = await remark().use(remarkHtml, { sanitize: false }).process(markdown);
+  return sanitizeContent(result.toString());
 }
 
 // ── Table bootstrap ───────────────────────────────────────────────────────────
@@ -161,18 +202,20 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ slu
     return NextResponse.json({ ok: true }, { status: 201 });
   }
 
-  const cleanName = sanitize(name ?? "");
-  const cleanContent = sanitize(content ?? "");
+  const cleanName = sanitizeName(name ?? "");
+  const rawContent = String(content ?? "").trim();
 
-  if (!cleanName || !cleanContent) {
+  if (!cleanName || !rawContent) {
     return NextResponse.json({ error: "Name and message are required." }, { status: 400 });
   }
   if (cleanName.length > 100) {
     return NextResponse.json({ error: "Name too long." }, { status: 400 });
   }
-  if (cleanContent.length > 2000) {
+  if (rawContent.length > 2000) {
     return NextResponse.json({ error: "Message too long (max 2000 characters)." }, { status: 400 });
   }
+
+  const cleanContent = await processMarkdown(rawContent);
 
   if (!process.env.v5sitedb_DATABASE_URL) {
     return NextResponse.json({ error: "Database not configured." }, { status: 503 });
