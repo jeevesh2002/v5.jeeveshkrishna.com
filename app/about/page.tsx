@@ -1,7 +1,5 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { FileText, Mail } from "lucide-react";
-import { siteConfig } from "@/lib/data";
 
 export const metadata: Metadata = { title: "About" };
 
@@ -81,67 +79,6 @@ export default function AboutPage() {
           </p>
         ))}
       </div>
-
-      <hr
-        style={{ border: "none", borderTop: "1px solid var(--border)", marginBottom: "3.5rem" }}
-      />
-
-      <section>
-        <p
-          style={{
-            fontSize: "0.6875rem",
-            fontWeight: 600,
-            color: "var(--text-4)",
-            letterSpacing: "0.1em",
-            textTransform: "uppercase",
-            marginBottom: "1.25rem",
-          }}
-        >
-          Curriculum Vitae
-        </p>
-        <div style={{ display: "flex", gap: "2rem" }}>
-          <a
-            href="/resume"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="icon-link"
-            style={{
-              fontSize: "0.9375rem",
-              color: "var(--text-1)",
-              textDecoration: "underline",
-              textUnderlineOffset: "3px",
-              textDecorationThickness: "1px",
-              textDecorationColor: "var(--border)",
-              display: "flex",
-              alignItems: "center",
-              gap: "0.4rem",
-              transition: "color 0.15s",
-            }}
-          >
-            <FileText size={15} strokeWidth={1.5} />
-            Download CV
-          </a>
-          <a
-            href={`mailto:${siteConfig.email}`}
-            className="icon-link"
-            style={{
-              fontSize: "0.9375rem",
-              color: "var(--text-1)",
-              textDecoration: "underline",
-              textUnderlineOffset: "3px",
-              textDecorationThickness: "1px",
-              textDecorationColor: "var(--border)",
-              display: "flex",
-              alignItems: "center",
-              gap: "0.4rem",
-              transition: "color 0.15s",
-            }}
-          >
-            <Mail size={15} strokeWidth={1.5} />
-            Email me
-          </a>
-        </div>
-      </section>
     </div>
   );
 }
