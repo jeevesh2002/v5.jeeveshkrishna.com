@@ -4,6 +4,7 @@ import { getAllSlugs, getPostBySlug, formatDate } from "@/lib/posts";
 import { notFound } from "next/navigation";
 import Comments from "@/components/Comments";
 import ShareButtons from "@/components/ShareButtons";
+import NewsletterSidebar from "@/components/NewsletterSidebar";
 import { siteConfig } from "@/lib/data";
 
 interface Props {
@@ -48,7 +49,7 @@ export default async function PostPage({ params }: Props) {
   if (!post || !post.published) notFound();
 
   return (
-    <div style={{ maxWidth: "640px", margin: "0 auto", padding: "5.5rem 24px" }}>
+    <div style={{ maxWidth: "900px", margin: "0 auto", padding: "5.5rem 24px" }}>
       <Link
         href="/blog"
         style={{
@@ -61,6 +62,11 @@ export default async function PostPage({ params }: Props) {
       >
         ← All posts
       </Link>
+
+      {/* Two-column layout: main content + sticky sidebar on desktop */}
+      <div style={{ display: "flex", gap: "3.5rem", alignItems: "flex-start" }}>
+        {/* Main content column */}
+        <div style={{ minWidth: 0, flex: 1, maxWidth: "640px" }}>
 
       <article>
         <header style={{ marginBottom: "3rem" }}>
@@ -151,6 +157,15 @@ export default async function PostPage({ params }: Props) {
           ← Back to all posts
         </Link>
       </div>
+
+        </div>{/* end main content column */}
+
+        {/* Newsletter sidebar — visible only at ≥900px via CSS class */}
+        <aside className="post-sidebar" style={{ position: "sticky", top: "88px" }}>
+          <NewsletterSidebar />
+        </aside>
+
+      </div>{/* end two-column flex */}
     </div>
   );
 }

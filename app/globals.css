@@ -318,3 +318,27 @@ body {
 .scroll-top-btn:hover {
   color: var(--text-2);
 }
+
+/* ─── Newsletter popup animation ─── */
+@keyframes popup-in {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ─── Blog post sidebar (newsletter widget) ─── */
+.post-sidebar {
+  display: none;
+}
+@media (min-width: 900px) {
+  .post-sidebar {
+    display: block;
+    width: 220px;
+    flex-shrink: 0;
+  }
+}
