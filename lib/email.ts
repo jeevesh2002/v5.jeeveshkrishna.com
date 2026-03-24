@@ -259,8 +259,11 @@ export function buildCommentNotificationText(opts: {
   ].join("\n");
 }
 
-export function buildSubscribeNotificationHtml(opts: { email: string }): string {
-  const { email } = opts;
+export function buildSubscribeNotificationHtml(opts: {
+  email: string;
+  subscribedAt: string;
+}): string {
+  const { email, subscribedAt } = opts;
   return `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -284,12 +287,19 @@ export function buildSubscribeNotificationHtml(opts: { email: string }): string 
 
           <tr>
             <td style="padding-top:32px;padding-bottom:32px;">
-              <h1 style="margin:0 0 20px;font-family:'Georgia',serif;font-size:22px;font-weight:600;color:#302c23;line-height:1.2;letter-spacing:-0.02em;">
-                Someone subscribed to your newsletter.
+              <h1 style="margin:0 0 24px;font-family:'Georgia',serif;font-size:22px;font-weight:600;color:#302c23;line-height:1.2;letter-spacing:-0.02em;">
+                New subscriber
               </h1>
-              <p style="margin:0;font-family:'Inter',Helvetica,Arial,sans-serif;font-size:15px;color:#48443b;line-height:1.75;">
-                ${escapeHtml(email)}
-              </p>
+              <table cellpadding="0" cellspacing="0" style="border-collapse:collapse;">
+                <tr>
+                  <td style="font-family:'Inter',Helvetica,Arial,sans-serif;font-size:12px;color:#a89e95;letter-spacing:0.06em;text-transform:uppercase;padding-right:20px;padding-bottom:10px;white-space:nowrap;">Email</td>
+                  <td style="font-family:'Inter',Helvetica,Arial,sans-serif;font-size:15px;color:#302c23;padding-bottom:10px;">${escapeHtml(email)}</td>
+                </tr>
+                <tr>
+                  <td style="font-family:'Inter',Helvetica,Arial,sans-serif;font-size:12px;color:#a89e95;letter-spacing:0.06em;text-transform:uppercase;padding-right:20px;white-space:nowrap;">Time</td>
+                  <td style="font-family:'Inter',Helvetica,Arial,sans-serif;font-size:15px;color:#302c23;">${escapeHtml(subscribedAt)}</td>
+                </tr>
+              </table>
             </td>
           </tr>
 
@@ -301,7 +311,10 @@ export function buildSubscribeNotificationHtml(opts: { email: string }): string 
 </html>`;
 }
 
-export function buildSubscribeNotificationText(opts: { email: string }): string {
-  const { email } = opts;
-  return ["New subscriber:", "", email].join("\n");
+export function buildSubscribeNotificationText(opts: {
+  email: string;
+  subscribedAt: string;
+}): string {
+  const { email, subscribedAt } = opts;
+  return ["New subscriber", "", `Email: ${email}`, `Time:  ${subscribedAt}`].join("\n");
 }

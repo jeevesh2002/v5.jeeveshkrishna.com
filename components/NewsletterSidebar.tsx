@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Mail } from "lucide-react";
 
 type Status = "idle" | "loading" | "success" | "error";
@@ -13,13 +13,9 @@ export default function NewsletterSidebar() {
   const [hp, setHp] = useState("");
   const [status, setStatus] = useState<Status>("idle");
   const [errorMsg, setErrorMsg] = useState("");
-  const [alreadySubscribed, setAlreadySubscribed] = useState(false);
-
-  useEffect(() => {
-    if (typeof window !== "undefined" && localStorage.getItem(DISMISSED_KEY)) {
-      setAlreadySubscribed(true);
-    }
-  }, []);
+  const [alreadySubscribed, setAlreadySubscribed] = useState(
+    () => typeof window !== "undefined" && !!localStorage.getItem(DISMISSED_KEY),
+  );
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();

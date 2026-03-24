@@ -103,8 +103,20 @@ export async function POST(req: NextRequest) {
     // rows is empty if the email already existed - silently succeed, no duplicate welcome
     if (rows.length > 0) {
       const unsubscribeToken = rows[0].unsubscribe_token as string;
-      await sendWelcomeEmail(email.toLowerCase().trim(), unsubscribeToken);
-      sendOwnerSubscribeNotification(email.toLowerCase().trim()).catch(() => {});
+      const subscribedAt = new Date().toLocaleString("en-US", {
+        timeZone: "UTC",
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit",
+        timeZoneName: "short",
+      });
+      await Promise.all([
+        sendWelcomeEmail(email.toLowerCase().trim(), unsubscribeToken),
+        sendOwnerSubscribeNotification(email.toLowerCase().trim(), subscribedAt),
+      ]);
     }
 
     return NextResponse.json({ ok: true }, { status: 201 });
@@ -114,7 +126,7 @@ export async function POST(req: NextRequest) {
   }
 }
 
-async function sendOwnerSubscribeNotification(email: string) {
+async function sendOwnerSubscribeNotification(email: string, subscribedAt: string) {
   const resendApiKey = process.env.RESEND_API_KEY;
   const notifyEmail = process.env.NOTIFY_EMAIL;
   if (!resendApiKey || !notifyEmail) return;
@@ -124,8 +136,8 @@ async function sendOwnerSubscribeNotification(email: string) {
     from: "Jeevesh Krishna <notifications@jeeveshkrishna.com>",
     to: notifyEmail,
     subject: `New subscriber: ${email}`,
-    html: buildSubscribeNotificationHtml({ email }),
-    text: buildSubscribeNotificationText({ email }),
+    html: buildSubscribeNotificationHtml({ email, subscribedAt }),
+    text: buildSubscribeNotificationText({ email, subscribedAt }),
   });
 
   if (error) {
