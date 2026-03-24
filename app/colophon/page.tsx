@@ -98,9 +98,8 @@ export default function ColophonPage() {
               lineHeight: 1.75,
             }}
           >
-            Next.js, TypeScript, and Tailwind CSS. No tracking beyond basic analytics. No ads. No
-            newsletter. Posts are written in Markdown. The site is statically exported and hosted on
-            Vercel.
+            Next.js, TypeScript, and Tailwind CSS. No tracking beyond basic analytics. No ads. Posts
+            are written in Markdown. The site is statically exported and hosted on Vercel.
           </p>
         </section>
 
