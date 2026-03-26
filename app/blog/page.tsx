@@ -4,13 +4,17 @@ import { Rss } from "lucide-react";
 import { getAllPosts } from "@/lib/posts";
 import BlogContent from "./BlogContent";
 import NewsletterSignup from "@/components/NewsletterSignup";
+import NewsletterSidebar from "@/components/NewsletterSidebar";
 
 export const metadata: Metadata = { title: "Blog" };
 
 export default function BlogPage() {
   const posts = getAllPosts();
   return (
-    <div style={{ maxWidth: "640px", margin: "0 auto", padding: "5.5rem 24px" }}>
+    <div
+      className="blog-outer"
+      style={{ maxWidth: "640px", margin: "0 auto", padding: "5.5rem 24px" }}
+    >
       <div
         style={{
           display: "flex",
@@ -64,7 +68,9 @@ export default function BlogPage() {
         and whatever I could not stop thinking about long enough to write down.
       </p>
       <BlogContent posts={posts} />
-      <NewsletterSignup />
+      <div className="blog-newsletter-mobile-only">
+        <NewsletterSignup />
+      </div>
       <p
         style={{
           marginTop: "2rem",
@@ -88,6 +94,11 @@ export default function BlogPage() {
         </Link>
         .
       </p>
+      <aside className="blog-sidebar-abs">
+        <div className="blog-sidebar-sticky">
+          <NewsletterSidebar />
+        </div>
+      </aside>
     </div>
   );
 }

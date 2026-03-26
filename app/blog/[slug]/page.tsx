@@ -4,6 +4,8 @@ import { getAllSlugs, getPostBySlug, formatDate } from "@/lib/posts";
 import { notFound } from "next/navigation";
 import Comments from "@/components/Comments";
 import ShareButtons from "@/components/ShareButtons";
+import NewsletterSignup from "@/components/NewsletterSignup";
+import NewsletterSidebar from "@/components/NewsletterSidebar";
 import { siteConfig } from "@/lib/data";
 
 interface Props {
@@ -48,7 +50,10 @@ export default async function PostPage({ params }: Props) {
   if (!post || !post.published) notFound();
 
   return (
-    <div style={{ maxWidth: "640px", margin: "0 auto", padding: "5.5rem 24px" }}>
+    <div
+      className="blog-outer"
+      style={{ maxWidth: "640px", margin: "0 auto", padding: "5.5rem 24px" }}
+    >
       <Link
         href="/blog"
         style={{
@@ -139,6 +144,10 @@ export default async function PostPage({ params }: Props) {
         <div className="prose" dangerouslySetInnerHTML={{ __html: post.contentHtml }} />
       </article>
 
+      <div className="blog-newsletter-mobile-only">
+        <NewsletterSignup />
+      </div>
+
       <ShareButtons title={post.title} slug={slug} />
 
       <Comments slug={slug} />
@@ -151,6 +160,11 @@ export default async function PostPage({ params }: Props) {
           ← Back to all posts
         </Link>
       </div>
+      <aside className="blog-sidebar-abs">
+        <div className="blog-sidebar-sticky">
+          <NewsletterSidebar />
+        </div>
+      </aside>
     </div>
   );
 }
