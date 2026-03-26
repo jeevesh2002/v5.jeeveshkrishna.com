@@ -126,6 +126,38 @@ body {
   }
 }
 
+/* ─── Blog layout with newsletter sidebar ─── */
+/* Content stays at its original centered position.
+   Sidebar is absolutely positioned to the right, outside the flow. */
+.blog-outer {
+  position: relative;
+}
+.blog-sidebar-abs {
+  display: none;
+}
+@media (min-width: 1200px) {
+  .blog-sidebar-abs {
+    display: block;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: calc(100% + 2rem);
+    width: 200px;
+  }
+  .blog-sidebar-sticky {
+    position: sticky;
+    top: 72px;
+  }
+}
+.blog-newsletter-mobile-only {
+  display: block;
+}
+@media (min-width: 1200px) {
+  .blog-newsletter-mobile-only {
+    display: none;
+  }
+}
+
 /* ─── Prose ─── */
 .prose {
   color: var(--text-2);
