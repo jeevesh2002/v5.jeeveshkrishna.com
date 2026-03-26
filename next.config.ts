@@ -21,12 +21,12 @@ const securityHeaders = [
     value: [
       "default-src 'self'",
       // 'unsafe-inline' required for Next.js hydration scripts and the theme init script
-      "script-src 'self' 'unsafe-inline' https://va.vercel-scripts.com",
+      "script-src 'self' 'unsafe-inline' https://va.vercel-scripts.com https://www.googletagmanager.com",
       // 'unsafe-inline' required for Next.js styled-jsx; Google Fonts CSS
       "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
       "font-src 'self' https://fonts.gstatic.com",
       "img-src 'self' data: blob:",
-      "connect-src 'self' https://vitals.vercel-insights.com https://va.vercel-scripts.com",
+      "connect-src 'self' https://vitals.vercel-insights.com https://va.vercel-scripts.com https://www.google-analytics.com https://analytics.google.com",
       "frame-src 'self'",
       // Block Flash, Java applets, and other plugins
       "object-src 'none'",
