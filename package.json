@@ -26,7 +26,6 @@
     "@neondatabase/serverless": "^1.0.2",
     "@types/sanitize-html": "^2.16.1",
     "@vercel/analytics": "^2.0.1",
-    "@vercel/postgres": "^0.10.0",
     "gray-matter": "^4.0.3",
     "lucide-react": "^0.577.0",
     "marked": "^17.0.4",
