@@ -265,7 +265,7 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ slu
     `;
 
     if (!isOwner) {
-      sendOwnerCommentNotification({ slug, name: cleanName, rawContent }).catch(() => {});
+      await sendOwnerCommentNotification({ slug, name: cleanName, rawContent }).catch(() => {});
     }
 
     return NextResponse.json(rows[0], { status: 201 });

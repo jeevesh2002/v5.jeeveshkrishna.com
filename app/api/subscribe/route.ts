@@ -104,7 +104,7 @@ export async function POST(req: NextRequest) {
     if (rows.length > 0) {
       const unsubscribeToken = rows[0].unsubscribe_token as string;
       await sendWelcomeEmail(email.toLowerCase().trim(), unsubscribeToken);
-      sendOwnerSubscribeNotification(email.toLowerCase().trim()).catch(() => {});
+      await sendOwnerSubscribeNotification(email.toLowerCase().trim()).catch(() => {});
     }
 
     return NextResponse.json({ ok: true }, { status: 201 });
