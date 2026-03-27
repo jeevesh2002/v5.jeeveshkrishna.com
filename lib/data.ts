@@ -64,43 +64,6 @@ export const education = [
   },
 ];
 
-export const skills = {
-  Languages: ["Python", "JavaScript", "TypeScript", "Java", "C", "C++", "Bash", "SQL", "HTML/CSS"],
-  Frameworks: [
-    "React.js",
-    "Next.js",
-    "Node.js",
-    "Express.js",
-    "Django",
-    "Flask",
-    "TailwindCSS",
-    "TensorFlow",
-    "OpenCV",
-  ],
-  "Infrastructure & Tools": [
-    "Docker",
-    "Kubernetes",
-    "Puppet",
-    "Ansible",
-    "Prometheus",
-    "Grafana",
-    "Git",
-    "Linux/Unix",
-    "SLURM",
-  ],
-  Networking: ["SNMP", "NETCONF", "YANG", "Wireshark", "iptables", "HAProxy", "Caddy"],
-  "Cloud & Databases": [
-    "AWS",
-    "GCP",
-    "Vercel",
-    "Digital Ocean",
-    "PostgreSQL",
-    "MongoDB",
-    "MySQL",
-    "Firebase",
-  ],
-};
-
 export const projects = [
   {
     title: "Secure-by-Design Federated Learning Protocol",
@@ -147,37 +110,6 @@ export const projects = [
       "Deployed Ganglia for real-time cluster performance metrics; tested with distributed matrix operations and Monte Carlo simulations.",
     ],
   },
-];
-
-export const awards = [
-  {
-    title: "IBM Quantum Spring Challenge 2023",
-    org: "IBM Quantum",
-    description: "7th person globally to complete all labs successfully.",
-  },
-  {
-    title: "MIT iQuHACK 2023",
-    org: "MIT iQuISE",
-    description:
-      "4th place in Microsoft's challenge focused on optimizing quantum circuits and quantum oracles.",
-  },
-  {
-    title: "NSEJS National Top 1%",
-    org: "IAPT (Indian Association of Physics Teachers)",
-    description:
-      "Awarded the National Top 1% certificate in the National Standard Examination in Junior Science.",
-  },
-];
-
-export const certifications = [
-  "Introduction to TensorFlow for AI, ML, and Deep Learning - DeepLearning.AI",
-  "MIT 6.S191: Introduction to Deep Learning - MIT",
-  "Quantum Algorithms and Cryptography - IIT Madras",
-  "Introduction to Cryptography (CMSC 456) - University of Maryland",
-  "Quantum Computation and Quantum Information (15-859BB) - Carnegie Mellon University",
-  "Qubit by Qubit (EQCI) - IBM / Qubit by Qubit",
-  "CS50's Introduction to Artificial Intelligence with Python - HarvardX",
-  "CS50's Introduction to Computer Science - HarvardX",
 ];
 
 export interface DiscontinuedSite {

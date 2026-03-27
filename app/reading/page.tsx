@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { interests } from "@/lib/data";
+import { interests, siteConfig } from "@/lib/data";
 import ReadingContent from "./ReadingContent";
 
 export const metadata: Metadata = { title: "Reading" };
@@ -38,7 +38,7 @@ export default function ReadingPage() {
       >
         Have a suggestion?{" "}
         <a
-          href="mailto:jarigala@umass.edu"
+          href={`mailto:${siteConfig.email}`}
           style={{
             color: "var(--text-3)",
             textDecoration: "underline",
