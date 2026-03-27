@@ -24,6 +24,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return {
     title: post.title,
     description: post.excerpt,
+    keywords: post.tags,
     openGraph: {
       title: post.title,
       description: post.excerpt,
@@ -49,11 +50,34 @@ export default async function PostPage({ params }: Props) {
   const post = await getPostBySlug(slug);
   if (!post || !post.published) notFound();
 
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    headline: post.title,
+    description: post.excerpt,
+    keywords: post.tags.join(", "),
+    datePublished: post.date,
+    url: `${siteConfig.siteUrl}/blog/${slug}`,
+    author: {
+      "@type": "Person",
+      name: siteConfig.name,
+      url: siteConfig.siteUrl,
+    },
+    publisher: {
+      "@type": "Person",
+      name: siteConfig.name,
+    },
+  };
+
   return (
     <div
       className="blog-outer"
       style={{ maxWidth: "640px", margin: "0 auto", padding: "5.5rem 24px" }}
     >
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       <Link
         href="/blog"
         style={{

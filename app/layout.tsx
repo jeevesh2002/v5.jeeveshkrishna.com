@@ -26,7 +26,7 @@ export const metadata: Metadata = {
   description:
     "Computer scientist. I build infrastructure and security systems, and think seriously about how technology shapes civilizational outcomes.",
   authors: [{ name: siteConfig.name }],
-  openGraph: { siteName: siteConfig.name, type: "website" },
+  openGraph: { siteName: siteConfig.name, type: "website", url: siteConfig.siteUrl },
   alternates: {
     types: {
       "application/rss+xml": `${siteConfig.siteUrl}/feed.xml`,

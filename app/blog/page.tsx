@@ -5,8 +5,22 @@ import { getAllPosts } from "@/lib/posts";
 import BlogContent from "./BlogContent";
 import NewsletterSignup from "@/components/NewsletterSignup";
 import NewsletterSidebar from "@/components/NewsletterSidebar";
+import { siteConfig } from "@/lib/data";
 
-export const metadata: Metadata = { title: "Blog" };
+const description =
+  "Things I went deep on - technical rabbit holes, ideas about how technology shapes the world, and whatever I could not stop thinking about long enough to write down.";
+
+export const metadata: Metadata = {
+  title: "Blog",
+  description,
+  alternates: { canonical: `${siteConfig.siteUrl}/blog` },
+  openGraph: {
+    title: "Blog",
+    description,
+    url: `${siteConfig.siteUrl}/blog`,
+    type: "website",
+  },
+};
 
 export default function BlogPage() {
   const posts = getAllPosts();

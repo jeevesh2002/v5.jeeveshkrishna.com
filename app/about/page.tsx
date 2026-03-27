@@ -1,7 +1,13 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { siteConfig } from "@/lib/data";
 
-export const metadata: Metadata = { title: "About" };
+export const metadata: Metadata = {
+  title: "About",
+  description:
+    "Computer scientist specializing in networks and security. MS CS from UMass Amherst. I think about technology's long-term effects on civilization.",
+  alternates: { canonical: `${siteConfig.siteUrl}/about` },
+};
 
 export default function AboutPage() {
   return (

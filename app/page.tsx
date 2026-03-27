@@ -1,8 +1,13 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { Mail } from "lucide-react";
 import { siteConfig, interests } from "@/lib/data";
 import { getAllPosts, formatDate } from "@/lib/posts";
 import { GitHubIcon, LinkedInIcon } from "@/components/BrandIcons";
+
+export const metadata: Metadata = {
+  alternates: { canonical: siteConfig.siteUrl },
+};
 
 const heroLinks = [
   {
@@ -27,11 +32,26 @@ const heroLinks = [
 
 const recentReads = interests.flatMap((s) => s.links).slice(0, 5);
 
+const personJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Person",
+  name: siteConfig.name,
+  url: siteConfig.siteUrl,
+  sameAs: [siteConfig.github, siteConfig.linkedin],
+  jobTitle: siteConfig.title,
+  description:
+    "Computer scientist. I build infrastructure and security systems, and think seriously about how technology shapes civilizational outcomes.",
+};
+
 export default function Home() {
   const posts = getAllPosts().slice(0, 3);
 
   return (
     <div style={{ maxWidth: "640px", margin: "0 auto", padding: "0 24px" }}>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(personJsonLd) }}
+      />
       {/* Hero */}
       <section style={{ paddingTop: "7rem", paddingBottom: "5.5rem" }}>
         <h1
