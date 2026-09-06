@@ -34,10 +34,16 @@ test("the lock root exactly matches declared dependencies", () => {
   assert.deepEqual(packageLock.packages[""].devDependencies, packageJson.devDependencies);
   assert.equal(packageJson.dependencies.next, "16.3.1");
   assert.equal(packageJson.devDependencies["eslint-config-next"], "16.3.1");
-  assert.equal(packageJson.dependencies["sanitize-html"], "^2.17.5");
 });
 
 test("every repaired parallel dependency line remains above its fixed floor", () => {
+  const sanitizerVersions = lockedVersions("sanitize-html");
+  assert.ok(sanitizerVersions.length > 0, "sanitize-html must remain locked");
+  assert.ok(
+    sanitizerVersions.every((version) => numericVersionAtLeast(version, "2.17.7")),
+    `sanitize-html resolves below its fixed floor: ${sanitizerVersions.join(", ")}`
+  );
+
   const minimumByMajor = {
     "brace-expansion": { 1: "1.1.16", 5: "5.0.7" },
     "js-yaml": { 3: "3.15.1", 4: "4.3.1" },

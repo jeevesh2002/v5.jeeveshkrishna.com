@@ -11,6 +11,7 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "typecheck": "tsc --noEmit",
+    "test:security": "node --test tests/security-dependencies.test.mjs",
     "prepare": "husky"
   },
   "lint-staged": {
