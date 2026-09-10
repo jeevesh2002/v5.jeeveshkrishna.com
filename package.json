@@ -27,7 +27,7 @@
     ]
   },
   "dependencies": {
-    "@neondatabase/serverless": "^1.0.2",
+    "@neondatabase/serverless": "^1.1.0",
     "@types/sanitize-html": "^2.16.1",
     "@vercel/analytics": "^2.0.1",
     "gray-matter": "^4.0.3",
