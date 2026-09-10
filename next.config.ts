@@ -2,7 +2,7 @@ import type { NextConfig } from "next";
 
 const securityHeaders = [
   // Prevent DNS prefetch leaking which resources this page loads
-  { key: "X-DNS-Prefetch-Control", value: "on" },
+  { key: "X-DNS-Prefetch-Control", value: "off" },
   // Force HTTPS for 2 years, include subdomains, apply to preload list
   { key: "Strict-Transport-Security", value: "max-age=63072000; includeSubDomains; preload" },
   // Block this page from being embedded in iframes (clickjacking prevention)
@@ -30,8 +30,9 @@ const securityHeaders = [
       "frame-src 'self'",
       // Block Flash, Java applets, and other plugins
       "object-src 'none'",
+      "frame-ancestors 'none'",
       // Prevent base tag injection attacks (attacker redirecting all relative URLs)
-      "base-uri 'self'",
+      "base-uri 'none'",
       // Prevent forms from submitting to external domains
       "form-action 'self'",
       "upgrade-insecure-requests",
@@ -48,6 +49,20 @@ const nextConfig: NextConfig = {
       {
         source: "/(.*)",
         headers: securityHeaders,
+      },
+      {
+        source: "/api/:path*",
+        headers: [
+          { key: "Cache-Control", value: "no-store" },
+          { key: "Referrer-Policy", value: "no-referrer" },
+        ],
+      },
+      {
+        source: "/:path(unsubscribe|subscribe-confirm)",
+        headers: [
+          { key: "Cache-Control", value: "no-store" },
+          { key: "Referrer-Policy", value: "no-referrer" },
+        ],
       },
     ];
   },

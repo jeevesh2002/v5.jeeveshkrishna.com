@@ -74,10 +74,10 @@ Browser -> `/blog/[slug]` -> `getPostBySlug()` reads `/posts/{slug}.md` -> gray-
 Form submit -> `POST /api/comments/[slug]` -> markdown sanitized with sanitize-html -> inserted into `comments` table -> returned to client
 
 **Newsletter:**
-Daily Vercel cron hits `GET /api/newsletter/auto-send` at 19:00 UTC -> finds posts not yet in `newsletter_sent` table -> batches emails via Resend -> marks posts sent
+Daily Vercel cron hits `GET /api/newsletter/auto-send` at 19:00 UTC -> authenticates -> atomically claims published posts in `newsletter_sent` -> sends batches with provider idempotency keys -> records acknowledgements. Manual sends use the same durable claim.
 
 **Subscribe:**
-Form submit -> `POST /api/subscribe` -> MX record + email validation -> inserted into `newsletter_subscribers` -> welcome email sent via Resend
+Form submit -> `POST /api/subscribe` -> validation and shared rate limit -> pending recipient (24-hour token) -> confirmation email -> explicit `POST /api/subscribe/confirm` -> atomic activation -> welcome email. Existing subscribers remain subscribed.
 
 ## Key Patterns
 
@@ -89,7 +89,7 @@ Form submit -> `POST /api/subscribe` -> MX record + email validation -> inserted
 
 **Admin auth:** `ADMIN_KEY` env var. Compared with timing-safe SHA256 hash. Used for posting owner-flagged comments and deleting any comment.
 
-**Rate limiting:** In-memory per serverless instance. Subscribe: 5/min/IP. Comment post: 3/10min/IP. Bot protection: honeypot fields.
+**Rate limiting:** Atomic PostgreSQL counters shared across serverless instances. Subscribe: 5/min/IP and 50/hour globally. Comment post: 3/10min/IP and 60/hour globally. Delete: 20/min/IP and 120/hour globally. Rejected clients do not consume the global accepted-work budget. Expired counters are pruned; forwarding headers are trusted only on Vercel. Bot protection: honeypot fields.
 
 ## Environment Variables
 
@@ -100,12 +100,12 @@ Form submit -> `POST /api/subscribe` -> MX record + email validation -> inserted
 | `RESEND_API_KEY`        | Resend API key for sending emails                           |
 | `CRON_SECRET`           | Vercel cron authentication (set automatically by Vercel)    |
 
-Optional rate limit overrides: `COMMENTS_POST_LIMIT`, `COMMENTS_POST_WINDOW`, `COMMENTS_DELETE_LIMIT`, `COMMENTS_DELETE_WINDOW`
+Rate budgets are defined in `lib/rate-limit.ts`. See `docs/security-operations.md` for schema, delivery failure, and deployment notes.
 
 ## Development
 
 ```bash
-npm install
+npm ci --ignore-scripts
 npm run dev        # http://localhost:3000
 npm run build
 npm run lint
@@ -129,3 +129,7 @@ Post content in Markdown...
 ```
 
 Set `published: false` to hide a post without deleting it. The newsletter cron will only send posts where `published: true` and the slug is not yet in the `newsletter_sent` table.
+
+## Security checks
+
+Use Node.js 24. Run `npm run test:security`, `npm run lint`, `npm run typecheck`, `npm run build`, and `npm audit`. CI runs these checks with read-only permissions and pinned actions. Dependabot checks npm daily and GitHub Actions weekly.
