@@ -2,6 +2,9 @@
   "name": "jeeveshkrishna.com",
   "version": "0.1.0",
   "private": true,
+  "engines": {
+    "node": "24.x"
+  },
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -11,7 +14,7 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "typecheck": "tsc --noEmit",
-    "test:security": "node --test tests/security-dependencies.test.mjs",
+    "test:security": "node --test tests/*.test.mjs",
     "prepare": "husky"
   },
   "lint-staged": {
@@ -30,9 +33,9 @@
     "gray-matter": "^4.0.3",
     "lucide-react": "^0.577.0",
     "marked": "^17.0.4",
-    "next": "16.3.1",
-    "react": "19.2.3",
-    "react-dom": "19.2.3",
+    "next": "16.3.4",
+    "react": "19.2.8",
+    "react-dom": "19.2.8",
     "remark": "^15.0.1",
     "remark-html": "^16.0.1",
     "resend": "^6.9.4",
@@ -40,11 +43,11 @@
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
-    "@types/node": "^20",
+    "@types/node": "^24.13.4",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "eslint": "^9",
-    "eslint-config-next": "16.3.1",
+    "eslint-config-next": "16.3.4",
     "husky": "^9.1.7",
     "lint-staged": "^16.4.0",
     "prettier": "^3.8.1",

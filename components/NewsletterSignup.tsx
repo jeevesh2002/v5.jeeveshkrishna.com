@@ -94,7 +94,7 @@ export default function NewsletterSignup() {
             lineHeight: 1.7,
           }}
         >
-          You are subscribed. Look out for the next one.
+          Check your inbox to confirm your subscription.
         </p>
       ) : (
         <form onSubmit={handleSubmit} noValidate>

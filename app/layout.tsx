@@ -1,11 +1,10 @@
 import type { Metadata } from "next";
 import { Inter, Lora } from "next/font/google";
-import Script from "next/script";
 import "./globals.css";
 import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
 import ScrollToTop from "@/components/ScrollToTop";
-import { Analytics } from "@vercel/analytics/next";
+import SiteAnalytics from "@/components/SiteAnalytics";
 import { siteConfig } from "@/lib/data";
 
 const inter = Inter({
@@ -57,19 +56,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <main style={{ paddingTop: "56px", minHeight: "100vh" }}>{children}</main>
         <Footer />
         <ScrollToTop />
-        <Analytics />
-        <Script
-          src="https://www.googletagmanager.com/gtag/js?id=G-ZX2M4QY3YR"
-          strategy="afterInteractive"
-        />
-        <Script id="google-analytics" strategy="afterInteractive">
-          {`
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            gtag('js', new Date());
-            gtag('config', 'G-ZX2M4QY3YR');
-          `}
-        </Script>
+        <SiteAnalytics />
       </body>
     </html>
   );

@@ -1,8 +1,13 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { siteConfig } from "@/lib/data";
+import { validUnsubscribeToken } from "@/lib/newsletter-unsubscribe";
 
-export const metadata: Metadata = { title: "Unsubscribe" };
+export const metadata: Metadata = {
+  title: "Unsubscribe",
+  robots: { index: false, follow: false },
+  referrer: "no-referrer",
+};
 
 const messages: Record<string, { heading: string; body: string }> = {
   success: {
@@ -26,10 +31,18 @@ const messages: Record<string, { heading: string; body: string }> = {
 export default async function UnsubscribePage({
   searchParams,
 }: {
-  searchParams: Promise<{ status?: string }>;
+  searchParams: Promise<{ status?: string | string[]; token?: string | string[] }>;
 }) {
-  const { status } = await searchParams;
-  const msg = (status ? messages[status] : undefined) ?? {
+  const { status, token } = await searchParams;
+  const canConfirm = validUnsubscribeToken(token);
+  const msg = (canConfirm
+    ? {
+        heading: "Unsubscribe from new posts?",
+        body: "Confirm below to stop receiving newsletter emails.",
+      }
+    : typeof status === "string" && Object.hasOwn(messages, status)
+      ? messages[status]
+      : undefined) ?? {
     heading: "Unsubscribe",
     body: "Use the link in your email to unsubscribe from future posts.",
   };
@@ -59,6 +72,25 @@ export default async function UnsubscribePage({
       >
         {msg.body}
       </p>
+      {canConfirm && (
+        <form action="/api/unsubscribe" method="post" style={{ marginBottom: "2.5rem" }}>
+          <input type="hidden" name="token" value={token} />
+          <input type="hidden" name="confirm" value="unsubscribe" />
+          <button
+            type="submit"
+            style={{
+              padding: "0.75rem 1.25rem",
+              border: "1px solid var(--border)",
+              borderRadius: "6px",
+              color: "var(--text-1)",
+              background: "var(--bg)",
+              cursor: "pointer",
+            }}
+          >
+            Unsubscribe
+          </button>
+        </form>
+      )}
       <Link
         href="/blog"
         style={{

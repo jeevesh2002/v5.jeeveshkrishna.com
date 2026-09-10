@@ -6,24 +6,45 @@ on:
   pull_request:
     branches: [master]
 
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   build:
-    name: Lint & Build
+    name: Security, Types, Lint & Build
     runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      NEXT_TELEMETRY_DISABLED: "1"
+      HUSKY: "0"
 
     steps:
-      - uses: actions/checkout@v4
-
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
-          node-version: 20
+          persist-credentials: false
+
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version-file: package.json
+          check-latest: true
           cache: "npm"
 
       - name: Install dependencies
-        run: npm ci
+        # Required native binaries are distributed as integrity-locked optional packages.
+        run: npm ci --ignore-scripts
+
+      - name: Audit all dependencies
+        run: npm audit --audit-level=low
 
       - name: Security regressions
         run: npm run test:security
+
+      - name: Typecheck
+        run: npm run typecheck
 
       - name: Lint
         run: npm run lint
@@ -31,6 +52,5 @@ jobs:
       - name: Build
         run: npm run build
         env:
-          # Keeps the build from failing when POSTGRES_URL is absent in CI.
-          # Comments are simply disabled when this is unset (see README).
-          POSTGRES_URL: ""
+          # CI must build without connecting to the production database.
+          v5sitedb_DATABASE_URL: ""

@@ -92,7 +92,7 @@ export default function NewsletterSidebar() {
             lineHeight: 1.6,
           }}
         >
-          You are subscribed. Look out for the next one.
+          Check your inbox to confirm your subscription.
         </p>
       ) : (
         <form onSubmit={handleSubmit} noValidate>

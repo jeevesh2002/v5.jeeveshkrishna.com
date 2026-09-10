@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { marked } from "marked";
+import { sanitizeCommentHtml } from "@/lib/comment-html";
 import {
   Bold,
   Code,
@@ -45,7 +46,9 @@ function MarkdownEditor({ value, onChange }: MarkdownEditorProps) {
   const [tab, setTab] = useState<"write" | "preview">("write");
 
   const previewHtml =
-    tab === "preview" ? (marked.parse(value || "_Nothing to preview._") as string) : "";
+    tab === "preview"
+      ? sanitizeCommentHtml(marked.parse(value || "_Nothing to preview._") as string)
+      : "";
 
   // Insert inline syntax wrapping the current selection (or a placeholder)
   function wrap(before: string, after: string = before, placeholder = "text") {

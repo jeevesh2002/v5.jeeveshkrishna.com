@@ -1,85 +1,43 @@
-import { neon } from "@neondatabase/serverless";
 import { NextRequest, NextResponse } from "next/server";
-import { getAllPosts } from "@/lib/posts";
-import { getPostBySlug } from "@/lib/posts";
-import { sendToSubscribers } from "@/app/api/newsletter/send/route";
-
-function getDb() {
-  const url = process.env.v5sitedb_DATABASE_URL;
-  if (!url) throw new Error("Database not configured.");
-  return neon(url);
-}
-
-// Vercel automatically sets CRON_SECRET and passes it as Bearer token on cron invocations
-function isValidCronRequest(req: NextRequest): boolean {
-  const cronSecret = process.env.CRON_SECRET;
-  if (!cronSecret) return false;
-  const auth = req.headers.get("authorization");
-  return auth === `Bearer ${cronSecret}`;
-}
-
-async function ensureTables() {
-  const sql = getDb();
-  await sql`
-    CREATE TABLE IF NOT EXISTS newsletter_sent (
-      slug VARCHAR(255) PRIMARY KEY,
-      sent_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-      recipient_count INTEGER DEFAULT 0
-    )
-  `;
-}
+import { getAllPosts, getPostBySlug } from "@/lib/posts";
+import { secretsMatch } from "@/lib/api-security";
+import { ensureNewsletterTable, type NewsletterResult } from "@/lib/newsletter";
+import { newsletterDb, sendNewsletter } from "@/lib/newsletter-delivery";
 
 export async function GET(req: NextRequest) {
-  if (!isValidCronRequest(req)) {
+  const authorization = req.headers.get("authorization");
+  const bearer = authorization?.startsWith("Bearer ") ? authorization.slice(7) : undefined;
+  if (!secretsMatch(bearer, process.env.CRON_SECRET)) {
     return NextResponse.json({ error: "Unauthorized." }, { status: 401 });
   }
-
-  if (!process.env.v5sitedb_DATABASE_URL) {
-    return NextResponse.json({ error: "Database not configured." }, { status: 503 });
+  if (!process.env.v5sitedb_DATABASE_URL || !process.env.RESEND_API_KEY) {
+    return NextResponse.json({ error: "Newsletter service unavailable." }, { status: 503 });
   }
 
-  if (!process.env.RESEND_API_KEY) {
-    return NextResponse.json({ error: "RESEND_API_KEY not set." }, { status: 503 });
-  }
+  try {
+    const sql = newsletterDb();
+    await ensureNewsletterTable(sql);
+    const attempted = await sql`SELECT slug FROM newsletter_sent`;
+    const attemptedSlugs = new Set(attempted.map((row) => row.slug));
+    const results: ({ slug: string } & NewsletterResult)[] = [];
 
-  await ensureTables();
-  const sql = getDb();
-
-  // Find published posts that have never been sent
-  const allPosts = getAllPosts(); // sorted newest first, published only
-  const sentRows = await sql`SELECT slug FROM newsletter_sent`;
-  const sentSlugs = new Set(sentRows.map((r) => r.slug as string));
-  const unsentPosts = allPosts.filter((p) => !sentSlugs.has(p.slug));
-
-  if (unsentPosts.length === 0) {
-    return NextResponse.json({ ok: true, processed: 0, message: "No new posts to send." });
-  }
-
-  const subscribers = await sql`SELECT email, unsubscribe_token FROM newsletter_subscribers`;
-
-  const results: { slug: string; sent: number; failed: number }[] = [];
-
-  for (const postMeta of unsentPosts) {
-    const post = await getPostBySlug(postMeta.slug);
-    if (!post) continue;
-
-    let sent = 0;
-    let failed = 0;
-
-    if (subscribers.length > 0) {
-      ({ sent, failed } = await sendToSubscribers({ post, subscribers }));
+    for (const metadata of getAllPosts()) {
+      if (attemptedSlugs.has(metadata.slug)) continue;
+      const post = await getPostBySlug(metadata.slug);
+      if (!post) continue;
+      const result = await sendNewsletter(sql, post);
+      if (result.status !== "already_claimed") results.push({ slug: post.slug, ...result });
     }
-
-    // Mark as sent even if there are zero subscribers - prevents re-queuing old posts
-    await sql`
-      INSERT INTO newsletter_sent (slug, recipient_count)
-      VALUES (${post.slug}, ${sent})
-      ON CONFLICT (slug) DO NOTHING
-    `;
-
-    results.push({ slug: post.slug, sent, failed });
-    console.log(`[newsletter auto-send] ${post.slug}: sent=${sent} failed=${failed}`);
+    const needsReview = results.some((result) => result.status === "needs_review");
+    return NextResponse.json(
+      { ok: !needsReview, processed: results.length, results },
+      { status: needsReview ? 502 : 200 }
+    );
+  } catch {
+    console.error("[newsletter auto-send] Send attempt requires review.");
+    return NextResponse.json(
+      { error: "Newsletter send unavailable. Review the send record." },
+      { status: 503 }
+    );
   }
-
-  return NextResponse.json({ ok: true, processed: results.length, results });
 }
